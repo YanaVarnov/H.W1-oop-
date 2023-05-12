@@ -53,6 +53,27 @@ public class State {
         return actions;
     }
 
+    public State result(Action action){
+        int rowNum = this.board.getTiles().length, colNum = this.board.getTiles()[0].length;
+        Action.makeMove(this.board, action);
+        Tile[][] tiles = this.board.getTiles();
+        String nextTiles = "";
+        for(int i = 0; i < rowNum; i++){
+            for(int j = 0; j < colNum - 1; j++){
+               if(tiles[i][j] != null)
+                   nextTiles += tiles[i][j].getValue() + " ";
+               else
+                   nextTiles += "_ ";
+            }
+            if(tiles[i][colNum - 1] != null)
+                nextTiles += tiles[i][colNum].getValue() + "|";
+            else
+                nextTiles += "_|";
+        }
+        State nextState = new State(new Board(nextTiles));
+        return nextState;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof State)) {

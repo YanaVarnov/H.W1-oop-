@@ -7,6 +7,9 @@ public class Action {
         this.direction = dir;
     }
 
+    //public Tile getTile(){return this.tile;}
+    //public Direction getDirection(){return this.direction;}
+
     /**
      * checks whether it's possible to move a tile in a given direction
      * @param rowNum number of rows of the board
@@ -65,6 +68,35 @@ public class Action {
                 break;
         }
         return tile;
+    }
+
+    public static void makeMove(Board board, Action action){
+        int rowNum = board.getTiles().length, colNum = board.getTiles()[0].length;
+        Tile[][] nextTiles = new Tile[rowNum][colNum];
+        System.arraycopy(board.getTiles(), 0, nextTiles, 0, rowNum);
+        int[] location = board.freeLocation();
+        int rowLoc = location[0], colLoc = location[1];
+        Tile nextTile = action.tile;
+        Direction nextDir = action.direction;
+        switch (nextDir){
+            case UP:
+                nextTiles[rowLoc][colLoc] = nextTile;
+                nextTiles[rowLoc + 1][colLoc] = null;
+                break;
+            case DOWN:
+                nextTiles[rowLoc][colLoc] = nextTile;
+                nextTiles[rowLoc - 1][colLoc] = null;
+                break;
+            case RIGHT:
+                nextTiles[rowLoc][colLoc] = nextTile;
+                nextTiles[rowLoc][colLoc - 1] = null;
+                break;
+            case LEFT:
+                nextTiles[rowLoc][colLoc] = nextTile;
+                nextTiles[rowLoc][colLoc + 1] = null;
+                break;
+        }
+        board.setTiles(nextTiles);
     }
 
     /**
