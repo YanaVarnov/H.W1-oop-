@@ -6,6 +6,9 @@ public class Tile {
     public Tile(int value){
         this.value = value;
     }
+    public int getValue(){
+        return this.value;
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Tile)) {

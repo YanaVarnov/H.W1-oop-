@@ -63,17 +63,24 @@ private String boardString;
             for (j=0;j<boardSize[1];j++){
                 counter=+2;
                 if(isDigit(arrBoard.charAt(counter)))
-                    board[i][j] =new Tile(Character.getNumericValue(arrBoard.charAt(counter)));
+                    tiles[i][j] =new Tile(Character.getNumericValue(arrBoard.charAt(counter)));
                 else
-                    board[i][j] = new Tile(0);
+                    tiles[i][j] = new Tile(0);
             }
         }
     }
 
-    public Tile[][] getTilles(){
-        int i;
+    public Tile[][] getTiles() {
+        int i, j;
+        int rowNum = this.tiles.length, colNum = this.tiles[0].length;
+        Tile[][] tempTiles = new Tile[rowNum][colNum];
+        for (i = 0; i < rowNum; i++) {
+            for (j = 0; j < colNum; j++) {
+                tempTiles[i][j] = new Tile(this.tiles[i][j].getValue());
+            }
+        }
+        return tempTiles;
     }
-
     public String getBoardString(){
         return this.boardString;
     }
