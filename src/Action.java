@@ -7,8 +7,8 @@ public class Action {
         this.direction = dir;
     }
 
-    //public Tile getTile(){return this.tile;}
-    //public Direction getDirection(){return this.direction;}
+    public int getTileValue(){return this.tile.getValue();}
+    public Direction getDirection(){return this.direction;}
 
     /**
      * Makes a copy of the current object
@@ -82,9 +82,9 @@ public class Action {
     }
 
     public static int makeMove(Board board, Action action){
-        int rowNum = board.getTiles().length, colNum = board.getTiles()[0].length;
+        int rowNum = board.rowNum, colNum = board.colNum;
         Tile [][] nextTiles = board.getTiles();
-        int[] location = board.freeLocation();
+        int[] location = board.findTile(0);
         int rowLoc = location[0], colLoc = location[1];
         int nextTile = 0;
         Direction nextDir = action.direction;

@@ -10,7 +10,7 @@ public class State {
      * @return true if the current state of the board is the goal state and false otherwise
      */
     public boolean isGoal(){
-        int rowNum = this.board.getTiles().length, colNum = this.board.getTiles()[0].length, value = 1;
+        int rowNum = this.board.rowNum, colNum = this.board.colNum, value = 1;
         String goalTiles = "";
         for(int i = 0; i < rowNum; i++){
             for(int j = 0; j < colNum - 1; j++) {
@@ -38,7 +38,7 @@ public class State {
     public Action[] actions(){
         Action[] temp = new Action[4];
         int rowNum = this.board.getTiles().length, colNum = this.board.getTiles()[0].length;
-        int[] location = this.board.freeLocation();
+        int[] location = this.board.findTile(0);
         int rowLoc = location[0], colLoc = location[1], count = 0;
         Direction[] directions = {Direction.UP, Direction.DOWN, Direction.RIGHT, Direction.LEFT};
         for(int dir = 0; dir < directions.length; dir++){
@@ -55,6 +55,32 @@ public class State {
     }
 
     public State result(Action action){
+        String nextBoardString = this.board.getBoardString();
+        Board nextBoard = new Board(nextBoardString);
+        int[] tileLoc = nextBoard.findTile(action.getTileValue()), freeLoc = new int[2];
+        switch (action.getDirection()){
+            case UP:
+                freeLoc[0] = tileLoc[0] - 1;
+                freeLoc[1] = tileLoc[1];
+                break;
+            case DOWN:
+                freeLoc[0] = tileLoc[0] + 1;
+                freeLoc[1] = tileLoc[1];
+                break;
+            case RIGHT:
+                freeLoc[0] = tileLoc[0];
+                freeLoc[1] = tileLoc[1] + 1;
+                break;
+            case LEFT:
+                freeLoc[0] = tileLoc[0];
+                freeLoc[1] = tileLoc[1] - 1;
+                break;
+        }
+        nextBoard.setSpecificTile(tileLoc[0], tileLoc[1], 0);
+        nextBoard.setSpecificTile(freeLoc[0], freeLoc[1], action.getTileValue());
+
+    }
+    public State result1(Action action){
         String nextTiles = this.board.getBoardString();
         int rowNum = this.board.getTiles().length, colNum = this.board.getTiles()[0].length;
         int nextTile = Action.makeMove(this.board, action);

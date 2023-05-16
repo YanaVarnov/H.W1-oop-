@@ -9,6 +9,10 @@ public class Tile {
         return this.value;
     }
 
+    public void setValue(int value){
+        this.value = value;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Tile)) {
