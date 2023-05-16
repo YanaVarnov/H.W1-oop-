@@ -17,6 +17,18 @@ public class Node {
         this.state = new State(possState);
     }
 
+    public State getState(){
+        String stateStr = state.board.getBoardString();
+        State currState = new State(stateStr);
+        return currState;
+    }
+
+    public Action getAction(){
+        int value = action.getTileValue();
+        Direction dir = action.getDirection();
+        Action currAction = new Action(value, dir);
+        return currAction;
+    }
 
     private int heuristicValue(){
 
