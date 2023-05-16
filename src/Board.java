@@ -35,16 +35,15 @@ private String boardString;
     private int[] getBoardSize(String arrBoard){
         int i,rowlen=0,colLen=0;
         int []arrBoardSize = new int[2];
-        String tempStr;
         for(i=0;i < arrBoard.length();i++){
             if (arrBoard.charAt(i) == '|')
-                 rowlen++;
-            if (rowlen == 1) {
-                 tempStr = arrBoard.substring(i);
-                 colLen = (tempStr.length() / 2) + 1;
+                rowlen++;
+
+            if (rowlen == 1 && colLen==0){
+                colLen = (i / 2) + 1;
             }
         }
-        arrBoardSize[0]=rowlen;
+        arrBoardSize[0]=rowlen + 1;
         arrBoardSize[1]=colLen;
         return arrBoardSize;
     }
@@ -61,11 +60,11 @@ private String boardString;
 
         for(i=0;i<boardSize[0];i++){
             for (j=0;j<boardSize[1];j++){
-                counter=+2;
-                if(isDigit(arrBoard.charAt(counter)))
+                if(Character.isDigit(arrBoard.charAt(counter)))
                     tiles[i][j] =new Tile(Character.getNumericValue(arrBoard.charAt(counter)));
                 else
                     tiles[i][j] = new Tile(0);
+                counter +=2;
             }
         }
     }
