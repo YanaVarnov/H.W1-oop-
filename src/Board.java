@@ -2,8 +2,8 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Board {
-private Tile [][] tiles;
-private String boardString;
+    private Tile [][] tiles;
+    private String boardString;
     /**
      * finds the indexes of the free space on the board
      * @return an array with the indexes: cell "0" for the row index and cell "1" for the column index

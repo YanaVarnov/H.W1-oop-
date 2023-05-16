@@ -1,4 +1,3 @@
-
 public class Tile {
 
     private int value;
@@ -6,8 +5,9 @@ public class Tile {
     public Tile(int value){
         this.value = value;
     }
-    public int getValue(){
+    public int getValue() {
         return this.value;
+    }
 
     @Override
     public boolean equals(Object other) {

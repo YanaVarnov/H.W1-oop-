@@ -1,8 +1,8 @@
 public class State {
     private Board board;
 
-    public State(Board currBoard){
-        this.board = currBoard;
+    public State(String currBoard){
+        this.board = new Board(currBoard);
     }
 
     /**
@@ -43,34 +43,40 @@ public class State {
         Direction[] directions = {Direction.UP, Direction.DOWN, Direction.RIGHT, Direction.LEFT};
         for(int dir = 0; dir < directions.length; dir++){
             if(Action.isActionValid(rowNum, colNum, directions[dir], rowLoc, colLoc)) {
-                Tile tile = Action.tileToMove(this.board, directions[dir], rowLoc, colLoc);
-                temp[count] = new Action(tile, directions[dir]);
+                int tileValue = Action.tileToMove(this.board, directions[dir], rowLoc, colLoc);
+                temp[count] = new Action(tileValue, directions[dir]);
                 count++;
             }
         }
         Action[] actions = new Action[count];
-        System.arraycopy(temp, 0, actions, 0, count);
+        for(int i = 0; i < count; i++)
+            actions[i] = temp[i].copyAction();
         return actions;
     }
 
     public State result(Action action){
+        String nextTiles = this.board.getBoardString();
         int rowNum = this.board.getTiles().length, colNum = this.board.getTiles()[0].length;
-        Action.makeMove(this.board, action);
+        int nextTile = Action.makeMove(this.board, action);
         Tile[][] tiles = this.board.getTiles();
-        String nextTiles = "";
+        String nextBoard = "";
         for(int i = 0; i < rowNum; i++){
             for(int j = 0; j < colNum - 1; j++){
-               if(tiles[i][j] != null)
+               if(tiles[i][j].getValue() != nextTile && tiles[i][j].getValue() != 0)
                    nextTiles += tiles[i][j].getValue() + " ";
-               else
+               else if(tiles[i][j].getValue() == nextTile)
                    nextTiles += "_ ";
+               else
+                   nextTiles += nextTile + " ";
             }
-            if(tiles[i][colNum - 1] != null)
+            if(tiles[i][colNum - 1].getValue() != nextTile && tiles[i][colNum - 1].getValue() != 0)
                 nextTiles += tiles[i][colNum].getValue() + "|";
-            else
+            else if(tiles[i][colNum - 1].getValue() == nextTile)
                 nextTiles += "_|";
+            else
+                nextTiles += nextTile + "|";
         }
-        State nextState = new State(new Board(nextTiles));
+        State nextState = new State(nextTiles);
         return nextState;
     }
 

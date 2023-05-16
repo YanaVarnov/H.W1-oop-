@@ -2,13 +2,24 @@ public class Action {
     private Tile tile;
     private Direction direction;
 
-    public Action(Tile tile, Direction dir){
-        this.tile = tile;
+    public Action(int tileValue, Direction dir){
+        this.tile = new Tile(tileValue);
         this.direction = dir;
     }
 
     //public Tile getTile(){return this.tile;}
     //public Direction getDirection(){return this.direction;}
+
+    /**
+     * Makes a copy of the current object
+     * @return a new object with the same attributes values as the current object
+     */
+    public Action copyAction(){
+        int value = this.tile.getValue();
+        Direction dir = this.direction;
+        Action copy = new Action(value, dir);
+        return copy;
+    }
 
     /**
      * checks whether it's possible to move a tile in a given direction
@@ -48,55 +59,50 @@ public class Action {
      * @param dir the direction the tile needs to be moved to
      * @param rowLoc row index of the free space on the board
      * @param colLoc column index of the free space on the board
-     * @return a Tile object of the tile that needs to be moved
+     * @return the value of the tile that needs to be moved
      */
-    public static Tile tileToMove(Board board, Direction dir, int rowLoc, int colLoc){
+    public static int tileToMove(Board board, Direction dir, int rowLoc, int colLoc){
         Tile[][] tiles = board.getTiles();
-        Tile tile = new Tile();
+        int tileValue = 0;
         switch(dir){
             case UP:
-                tile = new Tile(tiles[rowLoc + 1][colLoc].getValue());
+                tileValue = tiles[rowLoc + 1][colLoc].getValue();
                 break;
             case DOWN:
-                tile = new Tile(tiles[rowLoc - 1][colLoc].getValue());
+                tileValue = tiles[rowLoc - 1][colLoc].getValue();
                 break;
             case RIGHT:
-                tile = new Tile(tiles[rowLoc][colLoc - 1].getValue());
+                tileValue = tiles[rowLoc][colLoc - 1].getValue();
                 break;
             case LEFT:
-                tile = new Tile(tiles[rowLoc][colLoc + 1].getValue());
+                tileValue = tiles[rowLoc][colLoc + 1].getValue();
                 break;
         }
-        return tile;
+        return tileValue;
     }
 
-    public static void makeMove(Board board, Action action){
+    public static int makeMove(Board board, Action action){
         int rowNum = board.getTiles().length, colNum = board.getTiles()[0].length;
-        Tile[][] nextTiles = new Tile[rowNum][colNum];
-        System.arraycopy(board.getTiles(), 0, nextTiles, 0, rowNum);
+        Tile [][] nextTiles = board.getTiles();
         int[] location = board.freeLocation();
         int rowLoc = location[0], colLoc = location[1];
-        Tile nextTile = action.tile;
+        int nextTile = 0;
         Direction nextDir = action.direction;
         switch (nextDir){
             case UP:
-                nextTiles[rowLoc][colLoc] = nextTile;
-                nextTiles[rowLoc + 1][colLoc] = null;
+                nextTile = nextTiles[rowLoc + 1][colLoc].getValue();
                 break;
             case DOWN:
-                nextTiles[rowLoc][colLoc] = nextTile;
-                nextTiles[rowLoc - 1][colLoc] = null;
+                nextTile = nextTiles[rowLoc - 1][colLoc].getValue();
                 break;
             case RIGHT:
-                nextTiles[rowLoc][colLoc] = nextTile;
-                nextTiles[rowLoc][colLoc - 1] = null;
+                nextTile = nextTiles[rowLoc][colLoc - 1].getValue();
                 break;
             case LEFT:
-                nextTiles[rowLoc][colLoc] = nextTile;
-                nextTiles[rowLoc][colLoc + 1] = null;
+                nextTile = nextTiles[rowLoc][colLoc + 1].getValue();
                 break;
         }
-        board.setTiles(nextTiles);
+        return nextTile;
     }
 
     /**
@@ -104,7 +110,20 @@ public class Action {
      * @return a string the represents the action
      */
     public String toString(){
-        return "Move " + this.tile + " " + this.direction;
+        String str = "Move " + this.tile + " ";
+        switch(this.direction){
+            case UP:
+                str += "up";
+                break;
+            case DOWN:
+                str += "down";
+                break;
+            case RIGHT:
+                str += "right";
+            case LEFT:
+                str += "left";
+        }
+        return str;
     }
 
 }
