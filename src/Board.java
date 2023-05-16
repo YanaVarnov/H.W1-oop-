@@ -4,9 +4,7 @@ import java.util.StringTokenizer;
 public class Board {
     private Tile [][] tiles;
     private String boardString;
-
     protected int rowNum;
-
     protected int colNum;
 
     /**

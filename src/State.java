@@ -1,5 +1,5 @@
 public class State {
-    private Board board;
+    protected Board board;
 
     public State(String currBoard){
         this.board = new Board(currBoard);
@@ -37,7 +37,7 @@ public class State {
      */
     public Action[] actions(){
         Action[] temp = new Action[4];
-        int rowNum = this.board.getTiles().length, colNum = this.board.getTiles()[0].length;
+        int rowNum = this.board.rowNum, colNum = this.board.colNum;
         int[] location = this.board.findTile(0);
         int rowLoc = location[0], colLoc = location[1], count = 0;
         Direction[] directions = {Direction.UP, Direction.DOWN, Direction.RIGHT, Direction.LEFT};
@@ -56,8 +56,8 @@ public class State {
 
     public State result(Action action){
         String nextBoardString = this.board.getBoardString();
-        Board nextBoard = new Board(nextBoardString);
-        int[] tileLoc = nextBoard.findTile(action.getTileValue()), freeLoc = new int[2];
+        State nextState = new State(nextBoardString);
+        int[] tileLoc = nextState.board.findTile(action.getTileValue()), freeLoc = new int[2];
         switch (action.getDirection()){
             case UP:
                 freeLoc[0] = tileLoc[0] - 1;
@@ -76,33 +76,8 @@ public class State {
                 freeLoc[1] = tileLoc[1] - 1;
                 break;
         }
-        nextBoard.setSpecificTile(tileLoc[0], tileLoc[1], 0);
-        nextBoard.setSpecificTile(freeLoc[0], freeLoc[1], action.getTileValue());
-
-    }
-    public State result1(Action action){
-        String nextTiles = this.board.getBoardString();
-        int rowNum = this.board.getTiles().length, colNum = this.board.getTiles()[0].length;
-        int nextTile = Action.makeMove(this.board, action);
-        Tile[][] tiles = this.board.getTiles();
-        String nextBoard = "";
-        for(int i = 0; i < rowNum; i++){
-            for(int j = 0; j < colNum - 1; j++){
-               if(tiles[i][j].getValue() != nextTile && tiles[i][j].getValue() != 0)
-                   nextTiles += tiles[i][j].getValue() + " ";
-               else if(tiles[i][j].getValue() == nextTile)
-                   nextTiles += "_ ";
-               else
-                   nextTiles += nextTile + " ";
-            }
-            if(tiles[i][colNum - 1].getValue() != nextTile && tiles[i][colNum - 1].getValue() != 0)
-                nextTiles += tiles[i][colNum].getValue() + "|";
-            else if(tiles[i][colNum - 1].getValue() == nextTile)
-                nextTiles += "_|";
-            else
-                nextTiles += nextTile + "|";
-        }
-        State nextState = new State(nextTiles);
+        nextState.board.setSpecificTile(tileLoc[0], tileLoc[1], 0);
+        nextState.board.setSpecificTile(freeLoc[0], freeLoc[1], action.getTileValue());
         return nextState;
     }
 
