@@ -1,5 +1,11 @@
+
 public class Tile {
 
+    private int value;
+
+    public Tile(int value){
+        this.value = value;
+    }
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Tile)) {
