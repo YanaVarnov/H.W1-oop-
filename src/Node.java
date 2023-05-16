@@ -7,16 +7,14 @@ public class Node {
     public Node(int tileValue,Direction dir,String possState,Node father){
         this.action = new Action(tileValue,dir);
         this.state = new State(possState);
-        if(father != NULL)
-            this.parent = new Node(tileValue,dir,possState,parent);
+        if(father != null)
+            this.parent = new Node(father.getAction().getTileValue(), father.getAction().getDirection(), father.getState().board.getBoardString(), father.getParent());
+
 
     }
-
-    public Node(int tileValue,Direction dir,String possState){
-        this.action = new Action(tileValue,dir);
-        this.state = new State(possState);
+    public Node getParent(){
+        return this.parent;
     }
-
     public State getState(){
         String stateStr = state.board.getBoardString();
         State currState = new State(stateStr);
@@ -36,14 +34,14 @@ public class Node {
     }
 
     private Node[] expand(){
-        Node father = null;
+        Node father = new Node(action.getTileValue(), action.getDirection(), state.board.getBoardString(), parent);
         State possState;
         Action []possAct = state.actions();
         Node []nodes = new Node[possAct.length] ;
         for(int i=0;i<possAct.length;i++){
 
             possState = state.result(possAct[i]);
-            nodes[i] = new Node(possAct[i].getTileValue(),possAct[i].getDirection(),possState.board.getBoardString(),parentNode);
+            nodes[i] = new Node(possAct[i].getTileValue(),possAct[i].getDirection(),possState.board.getBoardString(),father);
         }
     }
 
