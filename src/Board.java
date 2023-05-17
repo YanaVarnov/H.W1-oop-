@@ -71,10 +71,18 @@ public class Board {
                 else
                     updateString += "_ ";
             }
-            if(tiles[i][colNum - 1].getValue() != 0)
-                updateString += tiles[i][colNum - 1].getValue() + "|";
-            else
-                updateString += "_|";
+            if(i == rowNum - 1){
+                if(tiles[i][colNum - 1].getValue() != 0)
+                    updateString += tiles[i][colNum - 1].getValue();
+                else
+                    updateString += "_";
+            }
+            else{
+                if(tiles[i][colNum - 1].getValue() != 0)
+                    updateString += tiles[i][colNum - 1].getValue() + "|";
+                else
+                    updateString += "_|";
+            }
         }
         return updateString;
     }
