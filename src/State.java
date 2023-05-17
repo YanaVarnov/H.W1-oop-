@@ -57,8 +57,8 @@ public class State {
     public State result(Action action){
         String nextBoardString = this.board.getBoardString();
         State nextState = new State(nextBoardString);
-        int[] tileLoc = nextState.board.findTile(action.getTileValue()), freeLoc = new int[2];
-        switch (action.getDirection()){
+        int[] tileLoc = nextState.board.findTile(action.getTileValue()), freeLoc = nextState.board.findTile(0);
+        /*switch (action.getDirection()){
             case UP:
                 freeLoc[0] = tileLoc[0] - 1;
                 freeLoc[1] = tileLoc[1];
@@ -75,7 +75,7 @@ public class State {
                 freeLoc[0] = tileLoc[0];
                 freeLoc[1] = tileLoc[1] - 1;
                 break;
-        }
+        }*/
         nextState.board.setSpecificTile(tileLoc[0], tileLoc[1], 0);
         nextState.board.setSpecificTile(freeLoc[0], freeLoc[1], action.getTileValue());
         return nextState;

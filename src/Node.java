@@ -4,20 +4,18 @@ public class Node {
     private State state;
     private Node parent;
 
-    public Node(String state){
+    public Node(Action action, String state, Node father){
+        if(father != null)
+            this.parent = new Node(father.action, father.state.board.getBoardString(), father.parent);
+        if(action != null)
+            this.action = new Action(action.getTileValue(), action.getDirection());
         this.state = new State(state);
-    }
-    public Node(int tileValue, Direction dir, String state, Node father){
-        this.action = new Action(tileValue,dir);
-        this.state = new State(state);
-        this.parent = new Node(father.action.getTileValue(), father.action.getDirection(),
-                father.state.board.getBoardString(), father.parent);
+
     }
     public Node getParent(){
         if(this.parent == null)
             return null;
-        Node parent = new Node(this.parent.action.getTileValue(), this.parent.action.getDirection(),
-                this.parent.state.board.getBoardString(), this.parent.parent);
+        Node parent = new Node(this.parent.action, this.parent.state.board.getBoardString(), this.parent.parent);
         return parent;
     }
     public State getState(){
@@ -40,15 +38,15 @@ public class Node {
     public Node[] expand(){
         Node father;
         if(this.action == null && this.parent == null)
-            father = new Node(state.board.getBoardString());
+            father = new Node(null, state.board.getBoardString(), null);
         else
-            father = new Node(action.getTileValue(), action.getDirection(), state.board.getBoardString(), parent.parent);
+            father = new Node(action,  state.board.getBoardString(), parent.parent);
         State possState;
         Action[] possAct = state.actions();
         Node[] childNodes = new Node[possAct.length] ;
-        for(int i=0;i<possAct.length;i++){
+        for(int i=0; i < possAct.length; i++){
             possState = state.result(possAct[i]);
-            childNodes[i] = new Node(possAct[i].getTileValue(),possAct[i].getDirection(),possState.board.getBoardString(),father);
+            childNodes[i] = new Node(possAct[i], possState.board.getBoardString(), father);
         }
         return childNodes;
     }
