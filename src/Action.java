@@ -109,8 +109,9 @@ public class Action {
      * represents the action as a string
      * @return a string the represents the action
      */
+    @Override
     public String toString(){
-        String str = "Move " + this.tile + " ";
+        String str = "Move " + this.tile.getValue() + " ";
         switch(this.direction){
             case UP:
                 str += "up";
@@ -120,8 +121,10 @@ public class Action {
                 break;
             case RIGHT:
                 str += "right";
+                break;
             case LEFT:
                 str += "left";
+                break;
         }
         return str;
     }
