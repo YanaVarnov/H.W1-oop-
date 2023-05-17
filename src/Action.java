@@ -2,8 +2,8 @@ public class Action {
     private Tile tile;
     private Direction direction;
 
-    public Action(int tileValue, Direction dir){
-        this.tile = new Tile(tileValue);
+    public Action(Tile tile, Direction dir){
+        this.tile = new Tile(tile.getValue());
         this.direction = dir;
     }
 
@@ -17,7 +17,7 @@ public class Action {
     public Action copyAction(){
         int value = this.tile.getValue();
         Direction dir = this.direction;
-        Action copy = new Action(value, dir);
+        Action copy = new Action(new Tile(value), dir);
         return copy;
     }
 
@@ -62,48 +62,24 @@ public class Action {
      * @return the value of the tile that needs to be moved
      */
     public static int tileToMove(Board board, Direction dir, int rowLoc, int colLoc){
-        Tile[][] tiles = board.getTiles();
         int tileValue = 0;
         switch(dir){
             case UP:
-                tileValue = tiles[rowLoc + 1][colLoc].getValue();
+                tileValue = board.findValueByLoc(rowLoc + 1, colLoc);
                 break;
             case DOWN:
-                tileValue = tiles[rowLoc - 1][colLoc].getValue();
+                tileValue = board.findValueByLoc(rowLoc - 1, colLoc);
                 break;
             case RIGHT:
-                tileValue = tiles[rowLoc][colLoc - 1].getValue();
+                tileValue = board.findValueByLoc(rowLoc, colLoc - 1);
                 break;
             case LEFT:
-                tileValue = tiles[rowLoc][colLoc + 1].getValue();
+                tileValue = board.findValueByLoc(rowLoc, colLoc + 1);
                 break;
         }
         return tileValue;
     }
 
-    public static int makeMove(Board board, Action action){
-        int rowNum = board.rowNum, colNum = board.colNum;
-        Tile [][] nextTiles = board.getTiles();
-        int[] location = board.findTile(0);
-        int rowLoc = location[0], colLoc = location[1];
-        int nextTile = 0;
-        Direction nextDir = action.direction;
-        switch (nextDir){
-            case UP:
-                nextTile = nextTiles[rowLoc + 1][colLoc].getValue();
-                break;
-            case DOWN:
-                nextTile = nextTiles[rowLoc - 1][colLoc].getValue();
-                break;
-            case RIGHT:
-                nextTile = nextTiles[rowLoc][colLoc - 1].getValue();
-                break;
-            case LEFT:
-                nextTile = nextTiles[rowLoc][colLoc + 1].getValue();
-                break;
-        }
-        return nextTile;
-    }
 
     /**
      * represents the action as a string

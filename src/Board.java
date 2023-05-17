@@ -4,8 +4,8 @@ import java.util.StringTokenizer;
 public class Board {
     private Tile [][] tiles;
     private String boardString;
-    protected int rowNum;
-    protected int colNum;
+    private int rowNum;
+    private int colNum;
 
     /**
      * gets the size of the board from the string
@@ -23,6 +23,8 @@ public class Board {
                 colLen = (i / 2) + 1;
             }
         }
+        if(rowlen == 0)
+            colLen = (arrBoard.length() / 2) + 1;
         rowNum = rowlen + 1;
         colNum= colLen;
     }
@@ -47,14 +49,41 @@ public class Board {
             }
         }
     }
+    public Board(Tile[][] tiles){
+        this.boardString = tilesToString(tiles);
+        this.rowNum = tiles.length;
+        this.colNum = tiles[0].length;
+        this.tiles = new Tile[rowNum][colNum];
+        for(int i = 0; i < rowNum; i++){
+            for(int j = 0; j < colNum; j++){
+                this.tiles[i][j] = new Tile(tiles[i][j].getValue());
+            }
+        }
+    }
 
-
+    public static String tilesToString(Tile[][] tiles){
+        String updateString = "";
+        int rowNum = tiles.length, colNum = tiles[0].length;
+        for(int i = 0; i < rowNum; i++){
+            for(int j = 0; j < colNum - 1; j++){
+                if(tiles[i][j].getValue() != 0)
+                    updateString += tiles[i][j].getValue() + " ";
+                else
+                    updateString += "_ ";
+            }
+            if(tiles[i][colNum - 1].getValue() != 0)
+                updateString += tiles[i][colNum - 1].getValue() + "|";
+            else
+                updateString += "_|";
+        }
+        return updateString;
+    }
 
     /**
      * finds the indexes of the free space on the board
      * @return an array with the indexes: cell "0" for the row index and cell "1" for the column index
      */
-    public int[] findTile(int value){
+    public int[] findTileByValue(int value){
         int[] location = new int[2];
         boolean flag = false;
         for(int i = 0; i < rowNum; i++){
@@ -72,6 +101,8 @@ public class Board {
         return location;
     }
 
+    public int findValueByLoc(int i, int j){return this.tiles[i][j].getValue();}
+
     public Tile[][] getTiles() {
         int i, j;
         Tile[][] tempTiles = new Tile[rowNum][colNum];
@@ -81,6 +112,11 @@ public class Board {
             }
         }
         return tempTiles;
+    }
+
+    public int[] getRowCol(){
+        int[] rowCol = {this.rowNum, this.colNum};
+        return rowCol;
     }
 
     public void setSpecificTile(int i, int j, int value){

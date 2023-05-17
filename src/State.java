@@ -1,16 +1,18 @@
 public class State {
-    protected Board board;
+    private Board board;
 
     public State(String currBoard){
         this.board = new Board(currBoard);
     }
 
+    public String getStateString(){return this.board.getBoardString();}
     /**
      * checks whether the current state of the board is the goal state
      * @return true if the current state of the board is the goal state and false otherwise
      */
     public boolean isGoal(){
-        int rowNum = this.board.rowNum, colNum = this.board.colNum, value = 1;
+        int[] rowCol = this.board.getRowCol();
+        int rowNum = rowCol[0], colNum = rowCol[1], value = 1;
         String goalTiles = "";
         for(int i = 0; i < rowNum; i++){
             for(int j = 0; j < colNum - 1; j++) {
@@ -24,8 +26,7 @@ public class State {
                 value++;
             }
         }
-        Board goalBoard = new Board(goalTiles);
-        if(this.board.equals(goalBoard))
+        if(this.board.getBoardString().equals(goalTiles))
             return true;
         else
             return false;
@@ -37,14 +38,15 @@ public class State {
      */
     public Action[] actions(){
         Action[] temp = new Action[4];
-        int rowNum = this.board.rowNum, colNum = this.board.colNum;
-        int[] location = this.board.findTile(0);
+        int[] rowCol = this.board.getRowCol();
+        int rowNum = rowCol[0], colNum = rowCol[1], value = 1;
+        int[] location = this.board.findTileByValue(0);
         int rowLoc = location[0], colLoc = location[1], count = 0;
         Direction[] directions = {Direction.UP, Direction.DOWN, Direction.RIGHT, Direction.LEFT};
         for(int dir = 0; dir < directions.length; dir++){
             if(Action.isActionValid(rowNum, colNum, directions[dir], rowLoc, colLoc)) {
                 int tileValue = Action.tileToMove(this.board, directions[dir], rowLoc, colLoc);
-                temp[count] = new Action(tileValue, directions[dir]);
+                temp[count] = new Action(new Tile(tileValue), directions[dir]);
                 count++;
             }
         }
@@ -55,29 +57,14 @@ public class State {
     }
 
     public State result(Action action){
-        String nextBoardString = this.board.getBoardString();
+        int value = action.getTileValue();
+        Tile[][] tiles = this.board.getTiles();
+        int[] tileLoc = this.board.findTileByValue(value);
+        int[] freeLoc = this.board.findTileByValue(0);
+        tiles[tileLoc[0]][tileLoc[1]] = new Tile(0);
+        tiles[freeLoc[0]][freeLoc[1]] = new Tile(value);
+        String nextBoardString = Board.tilesToString(tiles);
         State nextState = new State(nextBoardString);
-        int[] tileLoc = nextState.board.findTile(action.getTileValue()), freeLoc = nextState.board.findTile(0);
-        /*switch (action.getDirection()){
-            case UP:
-                freeLoc[0] = tileLoc[0] - 1;
-                freeLoc[1] = tileLoc[1];
-                break;
-            case DOWN:
-                freeLoc[0] = tileLoc[0] + 1;
-                freeLoc[1] = tileLoc[1];
-                break;
-            case RIGHT:
-                freeLoc[0] = tileLoc[0];
-                freeLoc[1] = tileLoc[1] + 1;
-                break;
-            case LEFT:
-                freeLoc[0] = tileLoc[0];
-                freeLoc[1] = tileLoc[1] - 1;
-                break;
-        }*/
-        nextState.board.setSpecificTile(tileLoc[0], tileLoc[1], 0);
-        nextState.board.setSpecificTile(freeLoc[0], freeLoc[1], action.getTileValue());
         return nextState;
     }
 
