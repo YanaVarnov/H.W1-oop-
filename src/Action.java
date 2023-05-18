@@ -7,7 +7,16 @@ public class Action {
         this.direction = dir;
     }
 
+    /**
+     * gives access to the object attribute: tile (value)
+     * @return a number representing the action's tile value
+     */
     public int getTileValue(){return this.tile.getValue();}
+
+    /**
+     * gives access to the object attribute: direction
+     * @return a Direction object representing the action's direction
+     */
     public Direction getDirection(){return this.direction;}
 
     /**

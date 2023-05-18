@@ -61,6 +61,43 @@ public class Board {
         }
     }
 
+    /**
+     * gives access to the object's attribute: boardString
+     * @return a String representing the board
+     */
+    public String getBoardString(){
+        return this.boardString;
+    }
+
+    /**
+     * gives access to the object attribute: tiles
+     * @return a 2D array of Tile representing the board
+     */
+    public Tile[][] getTiles() {
+        int i, j;
+        Tile[][] tempTiles = new Tile[rowNum][colNum];
+        for (i = 0; i < rowNum; i++) {
+            for (j = 0; j < colNum; j++) {
+                tempTiles[i][j] = new Tile(this.tiles[i][j].getValue());
+            }
+        }
+        return tempTiles;
+    }
+
+    /**
+     * gives access to the object attribute: rowNum, colNum
+     * @return an array in which cell "0" is for number of rows, anc cell "1" is for number of columns
+     */
+    public int[] getRowCol(){
+        int[] rowCol = {this.rowNum, this.colNum};
+        return rowCol;
+    }
+
+    /**
+     * takes a matrix of tiles and represents it as a string
+     * @param tiles 2D array of Tiles representing the board
+     * @return a String that represents the board
+     */
     public static String tilesToString(Tile[][] tiles){
         String updateString = "";
         int rowNum = tiles.length, colNum = tiles[0].length;
@@ -88,7 +125,7 @@ public class Board {
     }
 
     /**
-     * finds the indexes of the free space on the board
+     * finds the indexes of the tile with a specific value
      * @return an array with the indexes: cell "0" for the row index and cell "1" for the column index
      */
     public int[] findTileByValue(int value){
@@ -109,43 +146,36 @@ public class Board {
         return location;
     }
 
+    /**
+     * finds the value of a tile by being give its coordinates on the board
+     * @param i row index
+     * @param j column  index
+     * @return the value of the tile
+     */
     public int findValueByLoc(int i, int j){return this.tiles[i][j].getValue();}
 
-    public Tile[][] getTiles() {
-        int i, j;
-        Tile[][] tempTiles = new Tile[rowNum][colNum];
-        for (i = 0; i < rowNum; i++) {
-            for (j = 0; j < colNum; j++) {
-                tempTiles[i][j] = new Tile(this.tiles[i][j].getValue());
+    /**
+     * finds the goal board and represents it as a String
+     * @return a String representing the goal board
+     */
+    public String findGoalString(){
+        int rowNum = this.rowNum, colNum = this.colNum, value = 1;
+        String goalTiles = "";
+        for(int i = 0; i < rowNum; i++){
+            for(int j = 0; j < colNum - 1; j++) {
+                goalTiles += value + " ";
+                value++;
+            }
+            if(i == rowNum - 1)
+                goalTiles += "_";
+            else {
+                goalTiles += value + "|";
+                value++;
             }
         }
-        return tempTiles;
+        return goalTiles;
     }
 
-    public int[] getRowCol(){
-        int[] rowCol = {this.rowNum, this.colNum};
-        return rowCol;
-    }
-
-    public void setSpecificTile(int i, int j, int value){
-        char currDigit = (char) (this.tiles[i][j].getValue() + 48), nextDigit;
-        if(value == 0)
-            nextDigit = '_';
-        else
-            nextDigit = (char)(value + 48);
-        this.tiles[i][j].setValue(value);
-        int index = 0;
-        for(int k = 0; k < this.boardString.length(); k++){
-           if(this.boardString.charAt(k) == currDigit){
-               index = k;
-               break;
-           }
-        }
-        this.boardString = this.boardString.substring(0,index)+ nextDigit +this.boardString.substring(5);
-    }
-    public String getBoardString(){
-        return this.boardString;
-    }
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Board)) {

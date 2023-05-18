@@ -4,12 +4,13 @@ public class Tile {
     public Tile(int value){
         this.value = value;
     }
+
+    /**
+     * gives access to the object's attribute: value
+     * @return a number representing the tile's value
+     */
     public int getValue() {
         return this.value;
-    }
-
-    public void setValue(int value){
-        this.value = value;
     }
 
     @Override

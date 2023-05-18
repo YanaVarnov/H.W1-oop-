@@ -5,27 +5,24 @@ public class State {
         this.board = new Board(currBoard);
     }
 
+    /**
+     * gives access to the object attribute: boardString
+     * @return a String that represents the board
+     */
     public String getStateString(){return this.board.getBoardString();}
+
+    /**
+     * finds the String that represents the goal board
+     * @return a String that represents the goal board
+     */
+    public String getGoalStateString(){return this.board.findGoalString();}
+
     /**
      * checks whether the current state of the board is the goal state
      * @return true if the current state of the board is the goal state and false otherwise
      */
     public boolean isGoal(){
-        int[] rowCol = this.board.getRowCol();
-        int rowNum = rowCol[0], colNum = rowCol[1], value = 1;
-        String goalTiles = "";
-        for(int i = 0; i < rowNum; i++){
-            for(int j = 0; j < colNum - 1; j++) {
-                goalTiles += value + " ";
-                value++;
-            }
-            if(i == rowNum - 1)
-                goalTiles += "_";
-            else {
-               goalTiles += value + "|";
-                value++;
-            }
-        }
+        String goalTiles = this.board.findGoalString();
         if(this.board.getBoardString().equals(goalTiles))
             return true;
         else
@@ -33,7 +30,7 @@ public class State {
     }
 
     /**
-     * checks which actions can be made at the current state of the board
+     * checks which actions can be made from the current state of the board
      * @return an array of valid actions
      */
     public Action[] actions(){
@@ -55,6 +52,12 @@ public class State {
             actions[i] = temp[i].copyAction();
         return actions;
     }
+
+    /**
+     * finds the new state according to the action that is being made rom the current state
+     * @param action an Action object that represents an action that can be made from the current state
+     * @return a State object representing the new state
+     */
 
     public State result(Action action){
         int value = action.getTileValue();
