@@ -14,41 +14,59 @@ public class Board {
      */
     private void getBoardSize(String arrBoard){
         int i, rowlen=0, colLen=0;
-        int []arrBoardSize = new int[2];
+        String subCollCheck;
         for(i=0;i < arrBoard.length();i++){
             if (arrBoard.charAt(i) == '|')
                 rowlen++;
 
-            if (rowlen == 1 && colLen==0){
-                colLen = (i / 2) + 1;
+            if (rowlen == 1 && colLen == 0){
+                subCollCheck = arrBoard.substring(0,i);
+                colLen = subCollCheck.split(" ").length;
             }
         }
-        if(rowlen == 0)
-            colLen = (arrBoard.length() / 2) + 1;
+        if(rowlen==0)
+            colLen = arrBoard.split(" ").length;
+
         rowNum = rowlen + 1;
-        colNum= colLen;
+        colNum = colLen;
     }
+
 
     /**
      * a builder functions that builds the game board
      * @param arrBoard the given board string
      */
     public Board(String arrBoard){
-        int i,j,counter=0;
+        int i,rowCount=0,colCount=0;
         getBoardSize(arrBoard);
         this.tiles = new Tile[rowNum][colNum];
         this.boardString = arrBoard;
+        String []arrStr = arrBoard.split("[| ]");
 
-        for(i=0; i < rowNum; i++){
-            for (j=0; j < colNum; j++){
-                if(Character.isDigit(arrBoard.charAt(counter)))
-                    tiles[i][j] =new Tile(Character.getNumericValue(arrBoard.charAt(counter)));
-                else
-                    tiles[i][j] = new Tile(0);
-                counter +=2;
+        for(i=0; i <arrStr.length; i++)
+        {
+            tiles[rowCount][colCount] = new Tile(extractNumber(arrStr[i]));
+
+            colCount++;
+
+            if(colCount == colNum) {
+                colCount = 0;
+                rowCount++;
             }
+
         }
     }
+
+
+    private int extractNumber(String tileStr){
+        int tileChar=0;
+        if(tileStr.charAt(0)=='_')
+            return 0;
+
+        tileChar = Integer.parseInt(tileStr);
+        return tileChar;
+    }
+
     public Board(Tile[][] tiles){
         this.boardString = tilesToString(tiles);
         this.rowNum = tiles.length;
