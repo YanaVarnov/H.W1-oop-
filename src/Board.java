@@ -57,7 +57,11 @@ public class Board {
         }
     }
 
-
+    /**
+     * extracts and converts the value of the string into integer
+     * @param tileStr the string that holds the value of the Tile
+     * @return the value of the string converted to integer
+     */
     private int extractNumber(String tileStr){
         int tileChar=0;
         if(tileStr.charAt(0)=='_')
