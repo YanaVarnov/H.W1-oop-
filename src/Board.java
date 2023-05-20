@@ -57,7 +57,11 @@ public class Board {
         }
     }
 
-
+    /**
+     * extracts and converts the value of the string into integer
+     * @param tileStr the string that holds the value of the Tile
+     * @return the value of the string converted to integer
+     */
     private int extractNumber(String tileStr){
         int tileChar=0;
         if(tileStr.charAt(0)=='_')
@@ -67,25 +71,11 @@ public class Board {
         return tileChar;
     }
 
-    public Board(Tile[][] tiles){
-        this.boardString = tilesToString(tiles);
-        this.rowNum = tiles.length;
-        this.colNum = tiles[0].length;
-        this.tiles = new Tile[rowNum][colNum];
-        for(int i = 0; i < rowNum; i++){
-            for(int j = 0; j < colNum; j++){
-                this.tiles[i][j] = new Tile(tiles[i][j].getValue());
-            }
-        }
-    }
-
     /**
      * gives access to the object's attribute: boardString
      * @return a String representing the board
      */
-    public String getBoardString(){
-        return this.boardString;
-    }
+    public String getBoardString(){return this.boardString;}
 
     /**
      * gives access to the object attribute: tiles

@@ -3,7 +3,7 @@ public class Action {
     private Direction direction;
 
     public Action(Tile tile, Direction dir){
-        this.tile = new Tile(tile.getValue());
+        this.tile = tile;
         this.direction = dir;
     }
 

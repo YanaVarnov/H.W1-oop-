@@ -8,7 +8,7 @@ public class Node {
         if(father != null)
             this.parent = father;
         if(action != null)
-            this.action = new Action(new Tile(action.getTileValue()), action.getDirection());
+            this.action = action;
         this.state = new State(state);
 
     }
@@ -28,9 +28,7 @@ public class Node {
      * @return a State object that represents the state of the current object
      */
     public State getState(){
-        String stateStr = state.getStateString();
-        State currState = new State(stateStr);
-        return currState;
+        return this.state;
     }
 
     /**
@@ -40,19 +38,15 @@ public class Node {
     public Action getAction(){
         if(this.action == null)
             return null;
-        int value = action.getTileValue();
-        Direction dir = action.getDirection();
-        Action currAction = new Action(new Tile(value), dir);
-        return currAction;
+        return action;
     }
 
     /**
-     * calculates the heuristic value by checking the manhattan distance of each misplaced tile from its goal position
+     * calculates the heuristic value by checking the manhattan distance of each tile from its goal position
      * @return a number that represents the heuristic value
      */
     public int heuristicValue(){
-        int min = 0;
-        boolean flag = true;
+        int distSum = 0;
         String goal = state.getGoalStateString();
         Board goalBoard = new Board(goal);
         Board currBoard = new Board(this.state.getStateString());
@@ -61,19 +55,9 @@ public class Node {
         for(int val = 1; val < rowNum*colNum; val++){
             int[] currLoc = currBoard.findTileByValue(val);
             int[] goalLoc = goalBoard.findTileByValue(val);
-            int mDist = manhattanDistance(currLoc[0], currLoc[1], goalLoc[0], goalLoc[1]);
-            if(flag){
-                if(mDist != 0){
-                    min = mDist;
-                    flag = false;
-                }
-            }
-            else{
-                if(mDist < min)
-                    min = mDist;
-            }
+            distSum += manhattanDistance(currLoc[0], currLoc[1], goalLoc[0], goalLoc[1]);
         }
-        return min;
+        return distSum;
     }
 
     /**
@@ -98,7 +82,7 @@ public class Node {
     }
 
     /**
-     * finds the next nodes according to the possible action that can be made from the current state
+     * finds the next nodes according to the possible actions that can be made from the current state
      * @return an array of the next nodes
      */
     public Node[] expand(){
